@@ -1,6 +1,4 @@
 import pandas as pd
-import math
-import re
 
 source = './dataset/'
 artists_fichier = 'raw_artists.csv'
@@ -10,31 +8,26 @@ chemin_artists = source+artists_fichier
 artists = pd.read_csv(chemin_artists)
 
 """
-colonnes gardées : identifiant de l'artiste, l'année de début d'activité et de fin, la popularité de l'artiste
+colonnes gardées : identifiant de l'artiste, nom d'artiste,bio d'artiste,la popularité de l'artiste par like, l'image de l'artiste 
+
+certaines colonnes étaient pertinantes mais par un trop grand manque de données ne sont pas gardées.
 
 """
-
-colonnes = ["artist_id","artist_active_year_begin","artist_active_year_end","artist_favorites"]
+colonnes = ["artist_id","artist_name","artist_handle","artist_bio","artist_favorites","artist_image_file"]
 
 artists_subset = artists[colonnes]
 
-#remplacer les années de débuts d'activités par l'année d'ajout ou dans la bio 
-def extract_year(date_str):
-    match = re.search(r'\d{4}', str(date_str))
-    return int(match.group()) if match else None
 
-def fill_year():
-    annee_ajout = artists["artist_bio"].apply(extract_year);
-    artists_subset["artist_active_year_begin"].fillna(annee_ajout,inplace=True)
-    if(artists_subset["artist_active_year_begin"].isnull().values.any()):
-        annee_ajout = artists["artist_date_created"].apply(extract_year);
-        artists_subset["artist_active_year_begin"].fillna(annee_ajout,inplace=True)
+#remplir les bio vides
+artists_subset["artist_bio"].fillna("<p> </p>",inplace=True)
 
-fill_year()
+print(artists.isnull().sum()/len(artists)*100)
+print(artists_subset.isnull().sum()/len(artists_subset)*100)
 
-#remplacer les années supérieures à aujourd'hui par autre chose
-artists_subset.loc[artists_subset["artist_active_year_end"]>2025,"artist_active_year_end"]=0000
-artists_subset = artists_subset.sort_values('artist_active_year_end',ascending=False)
+#exporter le dataframe clean en csv 
+dossier_export = './cleaned_dataset/'
+nom_fichier = 'clean_artist.csv'
+chemin_export = dossier_export + nom_fichier
 
-print(artists_subset)
 
+artists_subset.to_csv(chemin_export)
