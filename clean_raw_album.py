@@ -1,21 +1,9 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-path = "/home/etudiant/Documents/SAE/Dataset/"
-ls = ["echonest.csv",
-      "feature.csv",
-      "genres.csv",
-      "raw_albums.csv",
-      "raw_artists.csv",
-      "raw_echonest.csv",
-      "raw_genres.csv",
-      "raw_track.csv",
-      "tracks.csv"]
 
-ls = [path+fich for fich in ls]
-
-# selection du fichier raw_albums.csv
-df = pd.read_csv(ls[3]) #lecture des 10 premières lignes 
+# lecture du fichier raw_albums.csv
+df = pd.read_csv("./dataset/raw_albums.csv") #lecture des 10 premières lignes 
 
 # affichage des différents attributs de la table
 print("Attributs : ", df.columns)
