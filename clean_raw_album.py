@@ -1,7 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-
 # lecture du fichier raw_albums.csv
 df = pd.read_csv("./dataset/raw_albums.csv") #lecture des 10 premières lignes 
 
@@ -22,7 +21,6 @@ Attributs retenus :
     - album_favorites : nombre de favoris sur l'album
     - album_listens : nombre d'écoutes de l'album
     - album_tracks : nombre de morceaux dans l'album
-    - tags : tags associés à l'album
     - artist_name : artiste principal
 '''
 
