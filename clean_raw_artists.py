@@ -1,4 +1,5 @@
 import pandas as pd
+from bs4 import BeautifulSoup
 
 source = './dataset/'
 artists_fichier = 'raw_artists.csv'
@@ -18,8 +19,10 @@ colonnes = ["artist_id","artist_name","artist_handle","artist_bio","artist_favor
 artists_subset = artists[colonnes]
 
 
-#remplir les bio vides
-artists_subset["artist_bio"].fillna("<p> </p>",inplace=True)
+#remplir les bio vides et retirer les balises html
+artists_subset["artist_bio"].fillna("No bio available",inplace=True)
+artists_subset["artist_bio"] = artists_subset["artist_bio"].apply(lambda x: BeautifulSoup(x, 'html.parser').get_text())
+
 
 print(artists.isnull().sum()/len(artists)*100)
 print(artists_subset.isnull().sum()/len(artists_subset)*100)
