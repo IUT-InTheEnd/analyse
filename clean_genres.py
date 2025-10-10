@@ -8,4 +8,6 @@ genres = genres.rename(columns={'parent': 'genre_parent_id', 'title': 'genre_tit
 genres['top_level'] = (genres['genre_parent_id'] == 0)
 print(genres)
 
-genres.to_csv('./cleaned_dataset/clean_genres.csv')
+
+
+genres.to_csv('./cleaned_dataset/clean_genres.csv', index=False)
