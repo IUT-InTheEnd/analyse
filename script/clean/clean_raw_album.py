@@ -1,3 +1,8 @@
+#@title           : clean_raw_album.py
+#@description     : Nettoyage du fichier raw_albums.csv
+#@author          : Antoine Stéphane
+#@date            : 2025-10-09
+
 import pandas as pd
 import matplotlib.pyplot as plt
 
