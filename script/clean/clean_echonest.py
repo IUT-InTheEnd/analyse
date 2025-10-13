@@ -79,8 +79,8 @@ def verifie_valeurs(df):
                     print(f"Valeur non numérique dans la colonne {col}: {val}")
 
 fichier = 'echonest.csv'
-chemin = './dataset/'
-chemin_clean = './cleaned_dataset/'
+chemin = '../../dataset/'
+chemin_clean = '../../cleaned_dataset/'
 
 if os.path.exists(chemin + fichier):
     df = pd.read_csv(chemin + fichier, header=None, low_memory=False)

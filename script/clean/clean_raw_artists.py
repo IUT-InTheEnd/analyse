@@ -1,7 +1,7 @@
 import pandas as pd
 from bs4 import BeautifulSoup
 
-source = './dataset/'
+source = '../../dataset/'
 artists_fichier = 'raw_artists.csv'
 
 chemin_artists = source+artists_fichier
@@ -28,7 +28,7 @@ print(artists.isnull().sum()/len(artists)*100)
 print(artists_subset.isnull().sum()/len(artists_subset)*100)
 
 #exporter le dataframe clean en csv 
-dossier_export = './cleaned_dataset/'
+dossier_export = '../../cleaned_dataset/'
 nom_fichier = 'clean_artist.csv'
 chemin_export = dossier_export + nom_fichier
 

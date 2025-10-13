@@ -1,7 +1,7 @@
 import pandas as pd
 
 # import from csv
-df = pd.read_csv("./dataset/raw_tracks.csv")
+df = pd.read_csv("../../dataset/raw_tracks.csv")
 
 # track date recorded : 103283 / 109727 qui sont NaN
 # Les attributs suivants ne sont pas intéressantes à traiter ou manque de données
@@ -35,4 +35,4 @@ df_temp = df["track_explicit"].fillna("Radio-Safe")
 df["track_explicit"] = df_temp
 
 # export to csv
-df.to_csv("./cleaned_dataset/clean_raw_tracks.csv",index=False)
+df.to_csv("../../cleaned_dataset/clean_raw_tracks.csv",index=False)

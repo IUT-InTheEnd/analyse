@@ -1,5 +1,5 @@
 import pandas as pd
-genres = pd.read_csv("./dataset/genres.csv")
+genres = pd.read_csv("../../dataset/genres.csv")
 
 # rename des columns pour que ça soit plus clair en database
 genres = genres.rename(columns={'parent': 'genre_parent_id', 'title': 'genre_title'})
@@ -10,4 +10,4 @@ print(genres)
 
 
 
-genres.to_csv('./cleaned_dataset/clean_genres.csv', index=False)
+genres.to_csv('../../cleaned_dataset/clean_genres.csv', index=False)
