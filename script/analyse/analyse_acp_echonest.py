@@ -90,3 +90,32 @@ y1 = list(pca.explained_variance_ratio_)
 x1 = range(len(y1))
 plt.bar(x1, y1)
 plt.show()
+
+# Je prends que les 4 premières valeurs car avec elles on atteint +50% de valeur propre 
+biplot(score=pca_res[:4,0:2],
+coeff=np.transpose(pca.components_[0:2,:4]),
+cat=y1[0:1], density=False, coeff_labels = list(range(4)))
+# [print(i, dimensions[i]) for i in range(len(dimensions))]
+plt.show()
+
+# Visualisation avec plan factoriel
+
+# Analyse acousticness / danceability car corrélation positive
+plt.scatter(
+    pca_res[:,0],
+    pca_res[:,1]
+)
+plt.xlabel("Acousticness")
+plt.ylabel("Danceability")
+plt.title("Plan factoriel (Acousticness vs Danceability)")
+plt.show()
+
+# Analyse energy / instrumentalness car corrélation négative
+plt.scatter(
+    pca_res[:,2],
+    pca_res[:,3]
+)
+plt.xlabel("Energy")
+plt.ylabel("Instrumentalness")
+plt.title("Plan factoriel (Energy vs Instrumentalness)")
+plt.show()
