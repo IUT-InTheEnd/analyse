@@ -8,7 +8,7 @@ df = pd.read_csv("./dataset/raw_tracks.csv")
 df = df.drop(columns=["album_title","album_url","artist_name","artist_url","artist_website",
                       "license_image_file","track_image_file","license_url","tags","track_bit_rate",
                       "track_comments","track_copyright_c","track_copyright_p","track_disc_number",
-                      "track_explicit_notes","track_url","track_file","track_information","track_language_code",
+                      "track_explicit_notes","track_url","track_file","track_information",
                       "track_lyricist","track_number","track_publisher","license_image_file_large",
                       "track_date_recorded", "license_title","track_composer"
                 ])
