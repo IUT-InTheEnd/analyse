@@ -15,69 +15,22 @@ from biplot import *
 fichier = "./cleaned_dataset/clean_echonest.csv"
 df = pd.read_csv(fichier)
 
-acousticness = df["echonest_audio_features_acousticness"]
-danceability = df["echonest_audio_features_danceability"]
-energy = df["echonest_audio_features_energy"]
-instrumentalness = df["echonest_audio_features_instrumentalness"]
-liveness = df["echonest_audio_features_liveness"]
-speechiness = df["echonest_audio_features_speechiness"]
-tempo = df["echonest_audio_features_tempo"]
-valence = df["echonest_audio_features_valence"]
-artist_discovery = df["echonest_social_features_artist_discovery"]
-artist_familiarity = df["echonest_social_features_artist_familiarity"]
-artist_hotttnesss = df["echonest_social_features_artist_hotttnesss"]
-song_currency = df["echonest_social_features_song_currency"]
-song_hotttnesss = df["echonest_social_features_song_hotttnesss"]
-
-valeur = np.stack(
-    (
-        acousticness,
-        danceability,
-        energy,
-        instrumentalness,
-        liveness,
-        speechiness,
-        tempo,
-        valence,
-        artist_discovery,
-        artist_familiarity,
-        artist_hotttnesss,
-        song_currency,
-        song_hotttnesss,
-    ),
-    axis=1
-)
-
-dimensions = [
-    "acousticness",
-    "danceability",
-    "energy",
-    "instrumentalness",
-    "liveness",
-    "speechiness",
-    "tempo",
-    "valence",
-    "artist_discovery",
-    "artist_familiarity",
-    "artist_hotttnesss",
-    "song_currency",
-    "song_hotttnesss",
-]
-
-scaler = StandardScaler()
-scaler.fit(valeur)
-valeur_scaled = scaler.transform(valeur)
+X = df[df.columns[:8]]
+temp = X.sub(X.mean())
+X_scaled = temp.div(X.std())
 
 # Entrainement du modèle
-pca = PCA()
-pca_res = pca.fit_transform(valeur_scaled)
+n_components = 8
+pca = PCA(n_components=n_components)
+pca_res = pca.fit_transform(X_scaled)
 print(pca_res)
+
+dimensions = ["Acousticness", "Danceability", "Energy", "Instrumentalness", "Liveness", "Speechiness", "Tempo", "Valence"]
 
 # Tableau de valeurs singulières + % variance
 
 eig = pd.DataFrame ({
-    "Dimension" :
-        dimensions,
+    "Dimension" : dimensions,
     "Valeur propre" : pca.explained_variance_,
     "% valeur propre" :
         np.round (pca.explained_variance_ratio_ * 100),
@@ -87,8 +40,11 @@ eig = pd.DataFrame ({
 print(eig)
 
 y1 = list(pca.explained_variance_ratio_)
-x1 = range(len(y1))
-plt.bar(x1, y1)
+fig, ax = plt.subplots()
+labels = [str(i+1).zfill(1) for i in range(n_components)]
+ax.bar(labels, y1, label = labels)
+ax.set_xlabel("PCA dimension")
+ax.set_ylabel("Explained variance percentage")
 plt.show()
 
 # Je prends que les 4 premières valeurs car avec elles on atteint +50% de valeur propre 
@@ -99,23 +55,22 @@ cat=y1[0:1], density=False, coeff_labels = list(range(4)))
 plt.show()
 
 # Visualisation avec plan factoriel
-
-# Analyse acousticness / danceability car corrélation positive
-plt.scatter(
-    pca_res[:,0],
-    pca_res[:,1]
-)
-plt.xlabel("Acousticness")
-plt.ylabel("Danceability")
-plt.title("Plan factoriel (Acousticness vs Danceability)")
+pca_df = pd.DataFrame({
+"Dim3 (Instrumentalness)" : pca_res[: , 3],
+"Dim1 (Danceability)" : pca_res[ : , 1] 
+})
+pca_df.plot.scatter("Dim1 (Danceability)", "Dim3 (Instrumentalness)")
+plt.xlabel("Dimension 1 (Danceability)")
+plt.ylabel("Dimension 3 (Instrumentalness)")
+plt.suptitle ("Premier plan factoriel")
 plt.show()
 
-# Analyse energy / instrumentalness car corrélation négative
-plt.scatter(
-    pca_res[:,2],
-    pca_res[:,3]
-)
-plt.xlabel("Energy")
-plt.ylabel("Instrumentalness")
-plt.title("Plan factoriel (Energy vs Instrumentalness)")
+pca_df = pd.DataFrame({
+"Dim0 (Acousticness)" : pca_res[: , 0],
+"Dim2 (Energy)" : pca_res[ : , 2]
+})
+pca_df.plot.scatter("Dim1 (Danceability)", "Dim2 (Energy)")
+plt.xlabel("Dimension 1 (Danceability)")
+plt.ylabel("Dimension 2 (Energy)")
+plt.suptitle ("Premier plan factoriel")
 plt.show()
