@@ -8,31 +8,44 @@ from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 from biplot import *
 
-input_file = "../../dataset/features.csv"
-df = pd.read_csv(input_file)
-values = df.iloc[3:, 1:]
+DATASET_PATH = "../../dataset"
 
-scaler = StandardScaler()
-scaler.fit(values)
-values_scaled = scaler.transform(values)
+df_genres = pd.read_csv(DATASET_PATH + "/genres.csv")
+df_tracks = pd.read_csv(DATASET_PATH + "/tracks.csv")
 
-pca = PCA()
-pca_res = pca.fit_transform(values_scaled)
+# print(df_tracks.head())
 
-eig = pd.DataFrame ({
-    "Dimension" :
-        [f"Dim {i}." for i in range(len(pca.components_))],
-    "Valeur propre" : pca.explained_variance_,
-    "% valeur propre" :
-        np.round (pca.explained_variance_ratio_ * 100),
-    "% cum. val. prop." :
-        np.round(np.cumsum(pca.explained_variance_ratio_) * 100)
-})
-print(eig.head(20))
+genre_listens = {}
+genre_favorites = {}
+genre_comments = {}
 
-y1 = list(pca.explained_variance_ratio_)
-biplot(score=pca_res[:16,0:2],
-coeff=np.transpose(pca.components_[0:2,:16]),
-cat=y1[0:1], density=False, coeff_labels = list(range(16))) #dimensions[6:])
-# [print(i, dimensions[i]) for i in range(len(dimensions))]
-plt.show()
+# print(df_tracks.head(2))
+def flatten(col) :
+    if col == "Unnamed: 0" : return "track_id"
+    fcol = col.split('.')[0]
+    for i, r in df_tracks.head(2).iterrows() :
+        if isinstance(r[col], float) : continue
+        fcol += '.' + r[col]
+    return fcol
+df_tracks.rename(flatten, axis='columns', inplace=True)
+df_tracks.drop([0, 1], axis='rows', inplace=True)
+
+for index, row in df_tracks.iterrows() :
+    for genre_id in eval(row["track.genres"]) :
+        if genre_id in genre_listens :
+            genre_listens[genre_id] += int(row["track.listens"])
+            genre_favorites[genre_id] += int(row["track.favorites"])
+            genre_comments[genre_id] += int(row["track.comments"])
+        else :
+            genre_listens[genre_id] = int(row["track.listens"])
+            genre_favorites[genre_id] = int(row["track.favorites"])
+            genre_comments[genre_id] = int(row["track.comments"])
+
+# print(genre_listens)
+# print(genre_favorites)
+# print(genre_comments)
+df_genres = df_genres.transpose()
+df_genres.rename(lambda col : df_genres[col]["genre_id"], axis='columns', inplace=True)
+
+for id in genre_listens :
+    pass

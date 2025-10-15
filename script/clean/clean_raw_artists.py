@@ -14,7 +14,7 @@ colonnes gardées : identifiant de l'artiste, nom d'artiste,bio d'artiste,la pop
 certaines colonnes étaient pertinantes mais par un trop grand manque de données ne sont pas gardées.
 
 """
-colonnes = ["artist_id","artist_name","artist_handle","artist_bio","artist_favorites","artist_image_file"]
+colonnes = ["artist_id","artist_name","artist_bio","artist_favorites","artist_image_file","tags"]
 
 artists_subset = artists[colonnes]
 
