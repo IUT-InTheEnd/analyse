@@ -19,6 +19,7 @@ Attributs retenus :
     - album_id : identifiant unique de l'album
     - artist_id : identifiant unique de l'artiste
     - license_parent_id : identifiant de la licence
+    - track_language_code : code de la langue du morceau
     - track_date_created : date d'ajout du morceau sur la plateforme
     - track_duration : durée du morceau
     - track_explicit : indique si le morceau est explicite ou non (valeurs possibles : "Radio-Safe", "Radio-Unsafe","Adults-Only")
