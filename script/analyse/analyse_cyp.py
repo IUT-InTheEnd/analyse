@@ -40,9 +40,9 @@ count_per_bin = df["duration_range"].value_counts().sort_index()
 plt.figure(figsize=(10,6))
 bars = plt.bar(count_per_bin.index.astype(str), count_per_bin.values, color="blue")
 plt.xticks(rotation=45)
-plt.xlabel("Tranche de durée du morceau")
-plt.ylabel("Nombre de morceaux")
-plt.title("Nombre de morceaux selon la durée du morceau")
+plt.xlabel("Song duration range")
+plt.ylabel("Number of songs")
+plt.title("Number of songs by song duration range")
 plt.tight_layout()
 
 for bar in bars:
@@ -60,12 +60,11 @@ plt.clf()
 favorites_per_bin = df.groupby("duration_range")["track_interest"].mean()
 
 plt.figure(figsize=(10,6))
-bars = plt.bar(favorites_per_bin.index.astype(str), favorites_per_bin.values, color="salmon")
-plt.xlabel("Tranche de durée")
-plt.ylabel("Score d'intérêt moyens (FMA)")
-plt.title("Score d'intérêt moyens selon la tranche de durée du morceau")
+bars = plt.bar(favorites_per_bin.index.astype(str), favorites_per_bin.values, color="blue")
+plt.xlabel("Song duration range")
+plt.ylabel("Average interest score (FMA)")
+plt.title("Average interest score by song duration range")
 plt.xticks(rotation=45)
-plt.tight_layout()
 
 # Ajouter les valeurs au-dessus de chaque barre
 for bar in bars:
@@ -75,4 +74,5 @@ for bar in bars:
              str(int(height)),
              ha='center', va='bottom', fontsize=12)
 
+plt.tight_layout()
 plt.savefig("images/analyse2_cyp.png")
