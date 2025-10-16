@@ -1,8 +1,10 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 import ast
+import squarify
+import numpy as np
 
-source = '../../cleaned_dataset/'
+source = './'
 artists_fichier = 'clean_artist.csv'
 
 chemin_artists = source+artists_fichier
@@ -25,42 +27,53 @@ plt.show()
 
 exploded = artists_subset.explode('tags')
 
+# Définir le nombre de barres
 top_n = 10
 
-#Fréquence des tags
-tag_counts_all = exploded['tags'].value_counts()
-top_tags = tag_counts_all.head(top_n)
 
-#Popularité totale (likes)
-tag_popularity_all = exploded.groupby('tags')['artist_favorites'].sum().sort_values(ascending=False)
-top_popularity = tag_popularity_all.head(top_n)
+tag_counts = exploded['tags'].value_counts().head(10)
 
-# Création des histogrammes
-fig, axes = plt.subplots(1, 2, figsize=(14, 7))
 
-# Histogramme 1 : fréquence
-axes[0].bar(
-    top_tags.index,
-    top_tags.values,
-    color='skyblue',
-    edgecolor='black'
+tag_popularity = exploded.groupby('tags')['artist_favorites'].sum().sort_values(ascending=False).head(10)
+
+# Création de la figure
+fig, axes = plt.subplots(1, 2, figsize=(16, 8))
+
+def add_labels_with_contrast(ax, values, labels, colors):
+    norm = plt.Normalize(np.min(values), np.max(values))
+    cmap = plt.cm.Blues if 'Frequency' in ax.get_title() else plt.cm.Reds
+    colors_mapped = cmap(norm(values))
+
+    rects = squarify.normalize_sizes(values, 100, 100)
+    rects = squarify.squarify(rects, 0, 0, 100, 100)
+    squarify.plot(sizes=values, color=colors_mapped, ax=ax, alpha=0.9)
+
+    for rect, label, color in zip(rects, labels, colors_mapped):
+        x = rect['x'] + rect['dx']/2
+        y = rect['y'] + rect['dy']/2
+        brightness = np.dot(color[:3], [0.299, 0.587, 0.114])
+        text_color = 'black' if brightness > 0.6 else 'white'
+        ax.text(x, y, label, va='center', ha='center', fontsize=10, color=text_color, weight='bold')
+
+    ax.axis('off')
+
+
+axes[0].set_title('Treemap of Tag Frequency (Top 10)', fontsize=14)
+add_labels_with_contrast(
+    axes[0],
+    tag_counts.values,
+    [f"{tag}\n{count}" for tag, count in zip(tag_counts.index, tag_counts.values)],
+    plt.cm.Blues(tag_counts.values / max(tag_counts.values))
 )
-axes[0].set_title('Most used Tag (Top 10)')
-axes[0].set_ylabel('Number of Tags')
-axes[0].set_xlabel('Tags')
-axes[0].tick_params(axis='x', rotation=45)
 
-# Histogramme 2 : popularité totale (likes)
-axes[1].bar(
-    top_popularity.index,
-    top_popularity.values,
-    color='salmon',
-    edgecolor='black'
+
+axes[1].set_title('Treemap of Tag Popularity (Top 10 by Likes)', fontsize=14)
+add_labels_with_contrast(
+    axes[1],
+    tag_popularity.values,
+    [f"{tag}\n{int(likes)}" for tag, likes in zip(tag_popularity.index, tag_popularity.values)],
+    plt.cm.Reds(tag_popularity.values / max(tag_popularity.values))
 )
-axes[1].set_title('Likes Distribution by Tag (Top 10)')
-axes[1].set_ylabel('Number of Likes')
-axes[1].set_xlabel('Tags')
-axes[1].tick_params(axis='x', rotation=45)
 
 plt.tight_layout()
 plt.show()
