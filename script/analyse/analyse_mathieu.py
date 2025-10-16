@@ -23,3 +23,44 @@ plt.ylabel('Number of likes')
 plt.tight_layout()
 plt.show()
 
+exploded = artists_subset.explode('tags')
+
+top_n = 10
+
+#Fréquence des tags
+tag_counts_all = exploded['tags'].value_counts()
+top_tags = tag_counts_all.head(top_n)
+
+#Popularité totale (likes)
+tag_popularity_all = exploded.groupby('tags')['artist_favorites'].sum().sort_values(ascending=False)
+top_popularity = tag_popularity_all.head(top_n)
+
+# Création des histogrammes
+fig, axes = plt.subplots(1, 2, figsize=(14, 7))
+
+# Histogramme 1 : fréquence
+axes[0].bar(
+    top_tags.index,
+    top_tags.values,
+    color='skyblue',
+    edgecolor='black'
+)
+axes[0].set_title('Most used Tag (Top 10)')
+axes[0].set_ylabel('Number of Tags')
+axes[0].set_xlabel('Tags')
+axes[0].tick_params(axis='x', rotation=45)
+
+# Histogramme 2 : popularité totale (likes)
+axes[1].bar(
+    top_popularity.index,
+    top_popularity.values,
+    color='salmon',
+    edgecolor='black'
+)
+axes[1].set_title('Likes Distribution by Tag (Top 10)')
+axes[1].set_ylabel('Number of Likes')
+axes[1].set_xlabel('Tags')
+axes[1].tick_params(axis='x', rotation=45)
+
+plt.tight_layout()
+plt.show()
