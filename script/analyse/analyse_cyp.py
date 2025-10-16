@@ -31,7 +31,7 @@ def duration_to_seconds(duration_str):
 df["duration_seconds"] = df["track_duration"].apply(duration_to_seconds)
 
 bins = [0, 60, 120, 180, 240, 300, 360, 420, 480, 540, 600, 900, 1800, 3600]
-labels = ["00:00 - 01:00", "01:00 - 02:00", "02:00 - 03:00", "03:00 - 04:00", "04:00 - 05:00", "05:00 - 06:00", "06:00 - 07:00", "07:00 - 08:00", "08:00 - 09:00", "09:00 - 10:00", "10:00 - 15:00", "15:00 - 30:00", "30:00 - 1:00:00"]
+labels = ["0 - 1", "1 - 2", "2 - 3", "3 - 4", "4 - 5", "5 - 6", "6 - 7", "7 - 8", "8 - 9", "9 - 10", "10 - 15", "15 - 30", "30+"]
 
 df["duration_range"] = pd.cut(df["duration_seconds"], bins=bins, labels=labels, right=False)
 
@@ -39,8 +39,8 @@ count_per_bin = df["duration_range"].value_counts().sort_index()
 
 plt.figure(figsize=(10,6))
 bars = plt.bar(count_per_bin.index.astype(str), count_per_bin.values, color="blue")
-plt.xticks(rotation=45)
-plt.xlabel("Track duration range")
+plt.xticks(rotation=0)
+plt.xlabel("Track duration range (in minutes)")
 plt.ylabel("Number of tracks")
 plt.title("Number of tracks by duration range")
 plt.tight_layout()
@@ -61,10 +61,10 @@ favorites_per_bin = df.groupby("duration_range")["track_interest"].mean()
 
 plt.figure(figsize=(10,6))
 bars = plt.bar(favorites_per_bin.index.astype(str), favorites_per_bin.values, color="blue")
-plt.xlabel("Track duration range")
+plt.xlabel("Track duration range (in minutes)")
 plt.ylabel("Average interest score (FMA)")
 plt.title("Average interest score by track duration range")
-plt.xticks(rotation=45)
+plt.xticks(rotation=0)
 
 # Ajouter les valeurs au-dessus de chaque barre
 for bar in bars:

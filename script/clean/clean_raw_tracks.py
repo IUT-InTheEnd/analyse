@@ -10,7 +10,7 @@ df = df.drop(columns=["album_title","album_url","artist_name","artist_url","arti
                       "track_comments","track_copyright_c","track_copyright_p","track_disc_number",
                       "track_explicit_notes","track_url","track_file","track_information",
                       "track_lyricist","track_number","track_publisher","license_image_file_large",
-                      "track_date_recorded", "license_title","track_composer"
+                      "track_date_recorded", "license_title","track_composer", "track_language_code"
                 ])
 
 '''
@@ -19,7 +19,6 @@ Attributs retenus :
     - album_id : identifiant unique de l'album
     - artist_id : identifiant unique de l'artiste
     - license_parent_id : identifiant de la licence
-    - track_language_code : code de la langue du morceau
     - track_date_created : date d'ajout du morceau sur la plateforme
     - track_duration : durée du morceau
     - track_explicit : indique si le morceau est explicite ou non (valeurs possibles : "Radio-Safe", "Radio-Unsafe","Adults-Only")
