@@ -4,7 +4,7 @@ import ast
 import squarify
 import numpy as np
 
-source = './'
+source = '../../cleaned_dataset/'
 artists_fichier = 'clean_artist.csv'
 
 chemin_artists = source+artists_fichier
