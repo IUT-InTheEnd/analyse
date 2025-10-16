@@ -33,4 +33,4 @@ nom_fichier = 'clean_artist.csv'
 chemin_export = dossier_export + nom_fichier
 
 
-artists_subset.to_csv(chemin_export)
+artists_subset.to_csv(chemin_export,index=False)
