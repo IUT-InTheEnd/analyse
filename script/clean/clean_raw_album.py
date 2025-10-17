@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # lecture du fichier raw_albums.csv
-df = pd.read_csv("../../dataset/raw_albums.csv") #lecture des 10 premières lignes 
+df = pd.read_csv("./dataset/raw_albums.csv") #lecture des 10 premières lignes 
 
 # affichage des différents attributs de la table
 print("Attributs : ", df.columns)
@@ -157,4 +157,4 @@ print("Erreurs id négatifs : ", count_negatives) # pas d'erreur
 
 
 # on créé un nouveau fichier csv avec les données nettoyées
-df.to_csv("../../cleaned_dataset/clean_albums.csv", index=False)
+df.to_csv("./cleaned_dataset/clean_albums.csv", index=False)

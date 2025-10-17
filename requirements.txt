@@ -4,3 +4,5 @@ matplotlib
 seaborn
 scikit-learn
 factor_analyzer
+squarify
+plotly
