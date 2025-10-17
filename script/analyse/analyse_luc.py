@@ -18,6 +18,7 @@ df_tracks = pd.read_csv(DATASET_PATH + "/tracks.csv")
 genre_listens = {}
 genre_favorites = {}
 genre_comments = {}
+genre_number = {}
 
 # print(df_tracks.head(2))
 def flatten(col) :
@@ -31,15 +32,19 @@ df_tracks.rename(flatten, axis='columns', inplace=True)
 df_tracks.drop([0, 1], axis='rows', inplace=True)
 
 for index, row in df_tracks.iterrows() :
-    for genre_id in eval(row["track.genres"]) :
-        if genre_id in genre_listens :
-            genre_listens[genre_id] += int(row["track.listens"])
-            genre_favorites[genre_id] += int(row["track.favorites"])
-            genre_comments[genre_id] += int(row["track.comments"])
-        else :
-            genre_listens[genre_id] = int(row["track.listens"])
-            genre_favorites[genre_id] = int(row["track.favorites"])
-            genre_comments[genre_id] = int(row["track.comments"])
+    # for genre_id in eval(row["track.genres"]) :
+    genre_id = row['track.genre_top']
+    if isinstance(genre_id, float) : continue
+    if genre_id in genre_listens :
+        genre_listens[genre_id] += int(row["track.listens"])
+        genre_favorites[genre_id] += int(row["track.favorites"])
+        genre_comments[genre_id] += int(row["track.comments"])
+        genre_number[genre_id] += 1
+    else :
+        genre_listens[genre_id] = int(row["track.listens"])
+        genre_favorites[genre_id] = int(row["track.favorites"])
+        genre_comments[genre_id] = int(row["track.comments"])
+        genre_number[genre_id] = 1
 
 # print(genre_listens)
 # print(genre_favorites)
@@ -47,5 +52,22 @@ for index, row in df_tracks.iterrows() :
 df_genres = df_genres.transpose()
 df_genres.rename(lambda col : df_genres[col]["genre_id"], axis='columns', inplace=True)
 
+ls_genre = []
+ls_genre_number = []
+ls_label = []
+
 for id in genre_listens :
-    pass
+    ls_genre.append(genre_listens[id])
+    ls_genre_number.append(genre_number[id])
+    ls_label.append(id)
+
+ls_avg = [i/j for i,j in zip(ls_genre, ls_genre_number)]
+
+
+ls_avg, ls_label = zip(*[(avg, lab) for avg, lab in sorted(zip(ls_avg, ls_label))])
+
+
+plt.barh(ls_label, ls_avg)
+plt.title("Average number of listens for each genre")
+plt.tight_layout()
+plt.show()
